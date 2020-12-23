@@ -3,16 +3,16 @@ var fs = require('fs')
 var url = require('url')
 var port = process.argv[2]
 
-if(!port){
+if (!port) {
   console.log('请指定端口号好不啦？\nnode server.js 8888 这样不会吗？')
   process.exit(1)
 }
 
-var server = http.createServer(function(request, response){
+var server = http.createServer(function (request, response) {
   var parsedUrl = url.parse(request.url, true)
-  var pathWithQuery = request.url 
+  var pathWithQuery = request.url
   var queryString = ''
-  if(pathWithQuery.indexOf('?') >= 0){ queryString = pathWithQuery.substring(pathWithQuery.indexOf('?')) }
+  if (pathWithQuery.indexOf('?') >= 0) { queryString = pathWithQuery.substring(pathWithQuery.indexOf('?')) }
   var path = parsedUrl.pathname
   var query = parsedUrl.query
   var method = request.method
@@ -21,15 +21,33 @@ var server = http.createServer(function(request, response){
 
   console.log('有个傻子发请求过来啦！路径（带查询参数）为：' + pathWithQuery)
 
-  if(path === '/'){
+  if (path === '/') {
     response.statusCode = 200
     response.setHeader('Content-Type', 'text/html;charset=utf-8')
-    response.write(`二哈`)
+    response.write(`
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <link rel="stylesheet" href="/x">
+    </head>
+    
+    <body>
+        <h1>田田川</h1>
+        <script src="/y"> </script>
+    </body>
+    
+    </html>`)
     response.end()
-  } else if(path === '/x'){
+  } else if (path === '/x') {
     response.statusCode = 200
     response.setHeader('Content-Type', 'text/css;charset=utf-8')
     response.write(`body{color: red;}`)
+    response.end()
+  } else if (path === '/y') {
+    response.statusCode = 200
+    response.setHeader('Content-Type', 'text/javascript;charset=utf-8')
+    response.write(`console.log('这是js内容')`)
     response.end()
   } else {
     response.statusCode = 404
